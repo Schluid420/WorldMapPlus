@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"package": "io.github.schluid.worldmapplus.client.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+		"CameraMixin",
+		"CloudRendererMixin",
+		"FogRendererMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

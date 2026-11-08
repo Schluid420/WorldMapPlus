@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "worldmapplus",
+	"version": "${version}",
+	"name": "WorldMapPlus",
+	"description": "A live world map: the camera flies up from your player and shows the real world from above, then zooms out seamlessly into a saved 2D map. Cave and Nether layers, discovery mode and death points. Client-side only, works on any server.",
+	"icon": "assets/worldmapplus/icon.png",
+	"authors": [
+		"Schluid"
+	],
+	"license": "All-Rights-Reserved",
+	"contact": {
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/worldmapplus",
+		"sources": "https://github.com/Schluid420/WorldMapPlus",
+		"issues": "https://github.com/Schluid420/WorldMapPlus/issues"
+	},
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"io.github.schluid.worldmapplus.client.WorldMapPlusClient"
+		],
+		"modmenu": [
+			"io.github.schluid.worldmapplus.client.ModMenuIntegration"
+		]
+	},
+	"mixins": [
+		{
+			"config": "worldmapplus.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.2",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"modmenu": "*"
+	}
+}
