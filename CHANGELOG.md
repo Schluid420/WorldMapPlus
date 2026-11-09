@@ -5,11 +5,11 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 08
+## [1.0.0] - 2026-11-08
 
 First release.
 
-### Added 2026-11-8
+### Added
 
 - Live 3D map view: the camera flies up from the player and looks down on the real world. Mouse wheel for height, drag to move, right drag to turn around the player with momentum, middle click for a tilted view, space to go back to the player.
 - Seamless change from the 3D view into a 2D map at the same scale, earlier in the tilted view, and up to 16 times further zoom.
