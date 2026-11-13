@@ -1,0 +1,17 @@
+{
+	"required": false,
+	"package": "io.github.schluid.worldmapplus.client.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+		"SodiumOcclusionCullerMixin",
+		"SodiumRayOcclusionMixin",
+		"SodiumRenderSectionManagerMixin",
+		"SodiumSectionTreeMixin",
+		"SodiumSectionVisitorMixin",
+		"SodiumTraversableTreeMixin",
+		"SodiumViewportMixin"
+	],
+	"injectors": {
+		"defaultRequire": 0
+	}
+}

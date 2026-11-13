@@ -22,8 +22,11 @@ public abstract class FogRendererMixin {
 		if (fog != null) {
 			fog.environmentalStart = FAR;
 			fog.environmentalEnd = FAR;
-			fog.renderDistanceStart = FAR;
-			fog.renderDistanceEnd = FAR;
+			// looking at the horizon: keep the normal fog at the edge of the loaded world
+			if (!MapCamera.horizonVisible()) {
+				fog.renderDistanceStart = FAR;
+				fog.renderDistanceEnd = FAR;
+			}
 		}
 	}
 }

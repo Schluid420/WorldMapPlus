@@ -9,6 +9,14 @@ repositories {
 		name = "Terraformers"
 		url = "https://maven.terraformersmc.com/"
 	}
+	// Sodium: only to compile our fixes for it. Our mod does not require it.
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+		content {
+			includeGroup "maven.modrinth"
+		}
+	}
 }
 
 loom {
@@ -40,6 +48,9 @@ dependencies {
 
 	// Mod Menu: only for development and the settings screen. Our mod does not require it at runtime.
 	implementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+	// Sodium: only needed to compile the fixes in the Sodium mixins. Not part of our mod and not used in runClient.
+	clientCompileOnly "maven.modrinth:sodium:mc26.3-0.9.2-fabric"
 }
 
 processResources {

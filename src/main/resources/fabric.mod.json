@@ -27,6 +27,10 @@
 		{
 			"config": "worldmapplus.client.mixins.json",
 			"environment": "client"
+		},
+		{
+			"config": "worldmapplus.sodium.mixins.json",
+			"environment": "client"
 		}
 	],
 	"depends": {

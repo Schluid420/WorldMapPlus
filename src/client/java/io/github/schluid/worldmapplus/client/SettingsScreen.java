@@ -97,8 +97,6 @@ public class SettingsScreen extends Screen {
 			case CAMERA -> {
 				slider("worldmapplus.settings.max_3d_height", "worldmapplus.unit.blocks", 64, 1024, 2,
 						() -> MapConfig.max3dHeight, v -> MapConfig.max3dHeight = v);
-				slider("worldmapplus.settings.tilt_switch", "worldmapplus.unit.percent", 40, 100, 5,
-						() -> MapConfig.tiltSwitchPercent, v -> MapConfig.tiltSwitchPercent = v);
 				slider("worldmapplus.settings.start_height", "worldmapplus.unit.blocks", 16, 256, 4,
 						() -> MapConfig.startHeight, v -> MapConfig.startHeight = v);
 				slider("worldmapplus.settings.zoom_speed", null, 1, 10, 1,

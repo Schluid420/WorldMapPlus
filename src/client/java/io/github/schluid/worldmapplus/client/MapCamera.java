@@ -1,11 +1,17 @@
 package io.github.schluid.worldmapplus.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 
 /** Camera state for the map view: height, tilt, rotation and panning. */
 public final class MapCamera {
 	public static final double MIN_HEIGHT = 8;
-	private static final double TILT_DEGREES = 30;
+	private static final double DEFAULT_TILT = 30;
+	/** The top screen edge always looks at least this far down, so the camera never sees the horizon. */
+	private static final double MIN_TOP_EDGE_ANGLE = 4;
+	public static final double MIN_TILT = 10;
+	public static final double MAX_TILT = 80;
 	private static final double FLAT_RANGE = 16;
 
 	private static boolean active;
@@ -17,8 +23,13 @@ public final class MapCamera {
 	private static double offsetZ;
 	private static boolean movedIn2d;
 	private static long lastNanos;
+	// degrees away from straight down, 0 = straight down
 	private static double tilt;
 	private static double tiltTarget;
+	private static double lastTilt = DEFAULT_TILT;
+	private static boolean cullingOff;
+	private static volatile Vec3 anchor;
+	private static boolean previousSmartCull;
 	private static double rotation;
 	private static double spin;
 
@@ -48,12 +59,43 @@ public final class MapCamera {
 	}
 
 	public static double switchHeight() {
-		double percent = 1.0 - (1.0 - MapConfig.tiltSwitchPercent / 100.0) * tilt;
-		return Math.max(MIN_HEIGHT * 4, MapConfig.max3dHeight * percent);
+		return Math.max(MIN_HEIGHT * 4, MapConfig.max3dHeight);
 	}
 
 	public static double maxHeight() {
 		return MapConfig.flatMap || flatOnly ? switchHeight() * FLAT_RANGE : switchHeight();
+	}
+
+	/**
+	 * Furthest camera distance for a tilt: the top edge of the screen must still hit the ground
+	 * inside the loaded chunks. The flatter the view, the closer the camera has to stay.
+	 */
+	static double tiltedMaxDistance(double tiltDegrees) {
+		Minecraft mc = Minecraft.getInstance();
+		double reach = mc.options.getEffectiveRenderDistance() * 16.0 * 0.9;
+		double halfFov = mc.options.fov().get() / 2.0;
+		// steepest tilt where the top screen edge still hits the ground
+		double horizonTilt = 90.0 - halfFov - MIN_TOP_EDGE_ANGLE;
+		double max = reach / groundReach(Math.min(tiltDegrees, horizonTilt), halfFov);
+		if (tiltDegrees > horizonTilt) {
+			// the horizon is in view now: stay close, vanilla fog hides the edge of the world
+			double t = (tiltDegrees - horizonTilt) / Math.max(1.0, MAX_TILT - horizonTilt);
+			max *= 1.0 - 0.75 * Math.clamp(t, 0.0, 1.0);
+		}
+		return Math.clamp(max, MIN_HEIGHT * 2, switchHeight() * 0.8);
+	}
+
+	/** Ground distance of the top screen edge from the player, per block of camera distance. */
+	private static double groundReach(double tiltDegrees, double halfFov) {
+		double pitch = Math.toRadians(90.0 - tiltDegrees);
+		double topEdge = pitch - Math.toRadians(halfFov);
+		return Math.max(0.5, Math.sin(pitch) / Math.tan(topEdge) - Math.cos(pitch));
+	}
+
+	/** True when the camera is tilted so far that the horizon shows; then normal fog stays on. */
+	public static boolean horizonVisible() {
+		double halfFov = Minecraft.getInstance().options.fov().get() / 2.0;
+		return pitch() - halfFov < MIN_TOP_EDGE_ANGLE;
 	}
 
 	public static void zoom(double scroll) {
@@ -97,11 +139,97 @@ public final class MapCamera {
 	}
 
 	public static void toggleTilt() {
-		tiltTarget = tiltTarget > 0.5 ? 0 : 1;
+		tiltTarget = tiltTarget > 0 ? 0 : lastTilt;
+	}
+
+	/**
+	 * Steepest tilt allowed at this distance. Zooming out straightens the camera step by step, so
+	 * it reaches straight down exactly where the 2D map starts; zooming back in brings the chosen
+	 * tilt back.
+	 */
+	private static double tiltLimit(double distance) {
+		double flatStart = switchHeight() * 0.8;
+		double fade = MAX_TILT * Math.sqrt(Math.clamp(1.0 - distance / flatStart, 0.0, 1.0));
+		return Math.min(maxTiltFor(distance), fade);
+	}
+
+	/** Steepest tilt where this distance still stays inside the loaded world. */
+	private static double maxTiltFor(double distance) {
+		double low = MIN_TILT;
+		double high = MAX_TILT;
+		if (tiltedMaxDistance(high) >= distance) {
+			return high;
+		}
+		for (int i = 0; i < 20; i++) {
+			double mid = (low + high) / 2;
+			if (tiltedMaxDistance(mid) >= distance) {
+				low = mid;
+			} else {
+				high = mid;
+			}
+		}
+		return low;
+	}
+
+	/** Right mouse button dragged up/down: tilts the camera between MIN_TILT and MAX_TILT. */
+	public static void addTilt(double degrees) {
+		if (returning || flatOnly) {
+			return;
+		}
+		// only in the tilted view (middle click)
+		if (tiltTarget <= 0) {
+			return;
+		}
+		// tilting never zooms: at this distance the tilt stops where it would look past the world
+		double limit = tiltLimit(Math.max(targetHeight, height));
+		tiltTarget = Math.clamp(tiltTarget + degrees, MIN_TILT, Math.max(MIN_TILT, limit));
+		lastTilt = tiltTarget;
 	}
 
 	public static double pitch() {
-		return 90.0 - TILT_DEGREES * tilt * (1.0 - flatAlpha());
+		return 90.0 - tilt * (1.0 - flatAlpha());
+	}
+
+	/** Called every frame with the player's eye position while the 3D map view is shown. */
+	public static void setAnchor(Vec3 eye) {
+		anchor = eye;
+	}
+
+	/**
+	 * Minecraft builds and picks the chunk sections to draw around the camera, and only up to the
+	 * render distance from it, also in height. Our camera hangs far above (and behind) the player,
+	 * so lower terrain fell out of that range and left holes. While the 3D map is shown, sections
+	 * are chosen around the player instead; what is actually in view still comes from the camera.
+	 */
+	public static Vec3 sectionCenter(Vec3 cameraPos) {
+		return active && !flatOnly && anchor != null ? anchor : cameraPos;
+	}
+
+	public static BlockPos sectionCenter(BlockPos cameraPos) {
+		return active && !flatOnly && anchor != null ? BlockPos.containing(anchor) : cameraPos;
+	}
+
+	/** The point to choose chunk sections around (the player), or null while the normal view is used. Used for Sodium. */
+	public static Vec3 cullAnchor() {
+		return active && !flatOnly ? anchor : null;
+	}
+
+	/**
+	 * The far-away, tilted camera confuses vanilla's cave culling: it hides chunk sections it
+	 * can't "see" through from the camera, which leaves holes along chunk borders. While the map
+	 * is open, culling is switched off and afterwards set back to what it was.
+	 */
+	public static void updateCulling() {
+		Minecraft mc = Minecraft.getInstance();
+		boolean wanted = active && !flatOnly;
+		if (wanted && !cullingOff) {
+			previousSmartCull = mc.smartCull;
+			mc.smartCull = false;
+			cullingOff = true;
+		} else if (!wanted && cullingOff) {
+			mc.smartCull = previousSmartCull;
+			cullingOff = false;
+		}
 	}
 
 	public static void resetPan() {
@@ -152,7 +280,9 @@ public final class MapCamera {
 		lastNanos = now;
 		double step = 1 - Math.exp(-seconds * MapConfig.flightSpeed);
 		height += (targetHeight - height) * step;
-		tilt += (tiltTarget - tilt) * step;
+		// zooming out straightens the camera by itself, zooming in brings the chosen tilt back
+		double goal = tiltTarget > 0 ? Math.min(tiltTarget, tiltLimit(height)) : 0;
+		tilt += (goal - tilt) * step;
 		if (spin != 0) {
 			rotate(spin * seconds);
 			spin *= Math.exp(-seconds * (11 - MapConfig.rotateInertia) * 0.8);

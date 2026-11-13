@@ -34,8 +34,6 @@
 	"worldmapplus.settings.map.tip": "2D-Karte an/aus, nur 2D, Aktualisierung, Schattierung und Todespunkte.",
 	"worldmapplus.settings.discovery": "Entdeckungsmodus",
 	"worldmapplus.settings.discovery.tip": "Die 2D-Karte zeigt nur, wo du schon warst.",
-	"worldmapplus.settings.tilt_switch": "Wechsel in Schrägansicht",
-	"worldmapplus.settings.tilt_switch.tip": "In der Schrägansicht schon bei diesem Anteil der max. 3D-Höhe in die 2D-Karte wechseln, damit man kein ungeladenes Gelände sieht. Standard: 60 %",
 	"worldmapplus.settings.rotate_sensitivity": "Dreh-Empfindlichkeit",
 	"worldmapplus.settings.rotate_sensitivity.tip": "Wie stark die Ansicht beim Ziehen mit der rechten Maustaste dreht. Standard: 5",
 	"worldmapplus.settings.rotate_inertia": "Nachdrehen",

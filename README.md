@@ -13,8 +13,8 @@ The mod only runs on your side. It works on any server, the server doesn't need 
 | M | Opens and closes the map (can be changed in the controls) |
 | Mouse wheel | Flies the camera up and down |
 | Left mouse button + drag | Moves the view |
-| Right mouse button + drag | Turns the view around your player. Let go while moving and it keeps turning for a moment |
-| Middle mouse button | Switches between straight down and a tilted bird's-eye view |
+| Right mouse button + drag | Sideways turns the view around your player (let go while moving and it keeps turning for a moment), up and down tilts the camera between 10° and 80° (only in the tilted view) |
+| Middle mouse button | Switches between straight down and the last tilted view |
 | Space | Back to your player, north up |
 | Esc | Closes the map |
 
@@ -22,7 +22,7 @@ Clouds and fog are hidden in the map view, so the ground stays clear even from f
 
 ### 2D map
 
-Above the highest 3D height (358 blocks by default, a bit earlier in the tilted view) the view blends into the 2D map at the same scale, so there is no jump. From there you can zoom out up to 16 times further. The 2D map is drawn from the chunks around you while you play and follows every change in real time, with shaded slopes like the vanilla map and deeper water drawn darker.
+Looking straight down, above the highest 3D height (358 blocks by default) the view blends into the 2D map at the same scale, so there is no jump. In the tilted view, zooming out straightens the camera step by step, so it is looking straight down right where the 2D map begins. Zooming back in brings your tilt back. The more you tilt, the earlier this starts, so you never look past the loaded world. Tilting itself only swings the camera around you and never zooms. From there you can zoom out up to 16 times further. The 2D map is drawn from the chunks around you while you play and follows every change in real time, with shaded slopes like the vanilla map and deeper water drawn darker.
 
 ### Caves and the Nether
 
@@ -46,7 +46,7 @@ With [Mod Menu](https://modrinth.com/mod/modmenu) you get a settings screen with
 
 | Page | Settings |
 | --- | --- |
-| Camera | Max. 3D height, switch in tilted view, start height, zoom speed, flight speed, turn sensitivity, turn momentum |
+| Camera | Max. 3D height, start height, zoom speed, flight speed, turn sensitivity, turn momentum |
 | Display | Pause game, hide HUD, hide clouds, arrow size, arrow from height, arrow color |
 | 2D map | 2D map on/off, 2D map only, map speed, height shading, death points, death points shown |
 | Discovery mode | On/off, uncover radius |
@@ -62,6 +62,11 @@ On the very first start a small note in the corner says that the mod is free and
 - Fabric API
 - Java 25
 - [Mod Menu](https://modrinth.com/mod/modmenu) is optional and adds the settings screen
+
+## Compatibility
+
+- **Sodium** and **Iris** (also with shaders) work. While the 3D map is open, WorldMapPlus adjusts how Sodium chooses the chunks it draws, so there are no holes in the terrain. Sodium is not required.
+- **Voxy** works, but in the 3D map view small holes can appear at the border between the real chunks and Voxy's far terrain. Voxy measures that border from the camera, and the map camera hangs far above your player. Normal gameplay is not affected. A higher render distance pushes the border further out, often out of the picture.
 
 ## Multiplayer
 

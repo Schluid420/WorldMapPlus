@@ -5,7 +5,9 @@
 	"client": [
 		"CameraMixin",
 		"CloudRendererMixin",
-		"FogRendererMixin"
+		"FogRendererMixin",
+		"LevelRendererMixin",
+		"SectionOcclusionGraphMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

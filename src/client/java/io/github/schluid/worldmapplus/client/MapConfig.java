@@ -19,7 +19,6 @@ public final class MapConfig {
 	public static int flightSpeed;
 	public static int rotateSensitivity;
 	public static int rotateInertia;
-	public static int tiltSwitchPercent;
 
 	// Display
 	public static boolean hideHud;
@@ -58,7 +57,6 @@ public final class MapConfig {
 		flightSpeed = 5;
 		rotateSensitivity = 5;
 		rotateInertia = 5;
-		tiltSwitchPercent = 60;
 		arrowColor = 1;
 		arrowHideHeight = 170;
 		only2d = false;
@@ -93,7 +91,6 @@ public final class MapConfig {
 		flightSpeed = readInt(p, "flightSpeed", flightSpeed, 1, 10);
 		rotateSensitivity = readInt(p, "rotateSensitivity", rotateSensitivity, 1, 10);
 		rotateInertia = readInt(p, "rotateInertia", rotateInertia, 0, 10);
-		tiltSwitchPercent = readInt(p, "tiltSwitchPercent", tiltSwitchPercent, 40, 100);
 		arrowColor = readInt(p, "arrowColor", arrowColor, 0, 1);
 		discovery = readBool(p, "discovery", discovery);
 		discoveryRadius = readInt(p, "discoveryRadius", discoveryRadius, 0, 1024);
@@ -139,7 +136,6 @@ public final class MapConfig {
 		p.setProperty("flightSpeed", Integer.toString(flightSpeed));
 		p.setProperty("rotateSensitivity", Integer.toString(rotateSensitivity));
 		p.setProperty("rotateInertia", Integer.toString(rotateInertia));
-		p.setProperty("tiltSwitchPercent", Integer.toString(tiltSwitchPercent));
 		p.setProperty("arrowColor", Integer.toString(arrowColor));
 		p.setProperty("discovery", Boolean.toString(discovery));
 		p.setProperty("discoveryRadius", Integer.toString(discoveryRadius));

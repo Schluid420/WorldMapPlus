@@ -12,7 +12,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
 /**
- * Map view. Wheel: height, left drag: move, right drag: rotate, middle click: tilt,
+ * Map view. Wheel: height, left drag: move, right drag: rotate (sideways) and tilt (up/down),
+ * middle click: straight down / tilted,
  * space: back to player.
  */
 public class MapViewScreen extends Screen {
@@ -89,7 +90,7 @@ public class MapViewScreen extends Screen {
 		if (fov <= 1 || fov >= 179) {
 			fov = minecraft.options.fov().get();
 		}
-		double distance = (MapCamera.currentHeight() + 1.6) / tiltFactor();
+		double distance = MapCamera.currentHeight() + 1.6;
 		return height / (2.0 * Math.max(1.0, distance) * Math.tan(Math.toRadians(fov) / 2.0));
 	}
 
@@ -249,6 +250,8 @@ public class MapViewScreen extends Screen {
 		if (rotating && event.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
 			double degrees = dragX * ROTATE_STEP * MapConfig.rotateSensitivity;
 			MapCamera.rotate(degrees);
+			// dragging up tilts towards the horizon
+			MapCamera.addTilt(-dragY * ROTATE_STEP * MapConfig.rotateSensitivity);
 			long now = System.nanoTime();
 			double seconds = Math.max(0.001, (now - lastRotateNanos) / 1.0E9);
 			lastRotateNanos = now;

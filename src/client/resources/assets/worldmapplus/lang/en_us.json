@@ -34,8 +34,6 @@
 	"worldmapplus.settings.map.tip": "2D map on/off, 2D only, updating, shading and death points.",
 	"worldmapplus.settings.discovery": "Discovery mode",
 	"worldmapplus.settings.discovery.tip": "The 2D map only shows where you have been.",
-	"worldmapplus.settings.tilt_switch": "Switch in tilted view",
-	"worldmapplus.settings.tilt_switch.tip": "In the tilted view, switch to the 2D map already at this share of the max. 3D height, so no unloaded terrain is seen. Default: 60 %",
 	"worldmapplus.settings.rotate_sensitivity": "Turn sensitivity",
 	"worldmapplus.settings.rotate_sensitivity.tip": "How much the view turns when dragging with the right mouse button. Default: 5",
 	"worldmapplus.settings.rotate_inertia": "Turn momentum",
