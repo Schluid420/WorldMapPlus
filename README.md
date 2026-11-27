@@ -12,6 +12,7 @@ The mod only runs on your side. It works on any server, the server doesn't need 
 | --- | --- |
 | M | Opens and closes the map (can be changed in the controls) |
 | Mouse wheel | Flies the camera up and down |
+| CTRL + mouse wheel | In the 2D map: zooms the 2D map without leaving it (let go of CTRL and the wheel flies the camera again) |
 | Left mouse button + drag | Moves the view |
 | Right mouse button + drag | Sideways turns the view around your player (let go while moving and it keeps turning for a moment), up and down tilts the camera between 10° and 80° (only in the tilted view) |
 | Middle mouse button | Switches between straight down and the last tilted view |
@@ -22,7 +23,7 @@ Clouds and fog are hidden in the map view, so the ground stays clear even from f
 
 ### 2D map
 
-Looking straight down, above the highest 3D height (358 blocks by default) the view blends into the 2D map at the same scale, so there is no jump. In the tilted view, zooming out straightens the camera step by step, so it is looking straight down right where the 2D map begins. Zooming back in brings your tilt back. The more you tilt, the earlier this starts, so you never look past the loaded world. Tilting itself only swings the camera around you and never zooms. From there you can zoom out up to 16 times further. The 2D map is drawn from the chunks around you while you play and follows every change in real time, with shaded slopes like the vanilla map and deeper water drawn darker.
+Looking straight down, above the highest 3D height (358 blocks by default) the view blends into the 2D map at the same scale, so there is no jump. In the tilted view, zooming out straightens the camera step by step, so it is looking straight down right where the 2D map begins. Zooming back in brings your tilt back. The more you tilt, the earlier this starts, so you never look past the loaded world. Tilting itself only swings the camera around you and never zooms. From there you can zoom out up to 16 times further. Hold CTRL and use the mouse wheel to zoom the 2D map itself, from 0.25 to 16 times, without going back into the 3D view. The 2D map is drawn from the chunks around you while you play, nearest chunks first, and follows every change, with shaded slopes like the vanilla map and deeper water drawn darker.
 
 ### Caves and the Nether
 

@@ -17,10 +17,10 @@
 	"environment": "client",
 	"entrypoints": {
 		"client": [
-			"io.github.schluid.worldmapplus.client.WorldMapPlusClient"
+          "worldmapplus.client.WorldMapPlusClient"
 		],
 		"modmenu": [
-			"io.github.schluid.worldmapplus.client.ModMenuIntegration"
+          "worldmapplus.client.ModMenuIntegration"
 		]
 	},
 	"mixins": [

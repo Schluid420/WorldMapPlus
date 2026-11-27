@@ -20,7 +20,7 @@
 	"worldmapplus.settings.arrow_size": "Arrow size",
 	"worldmapplus.settings.arrow_size.tip": "Size of the player arrow. Default: 100 %",
 	"worldmapplus.settings.chunks_per_tick": "Map speed",
-	"worldmapplus.settings.chunks_per_tick.tip": "Chunks per tick for the 2D map. Higher = updates faster, but needs more performance. Default: 6",
+	"worldmapplus.settings.chunks_per_tick.tip": "How fast new areas appear on the 2D map (time per tick). Higher = fills faster, but costs FPS. Default: 6",
 	"worldmapplus.settings.shading": "Height shading",
 	"worldmapplus.settings.shading.tip": "Draw slopes lighter and darker on the 2D map, like the vanilla map.",
 	"worldmapplus.settings.reset": "Defaults",

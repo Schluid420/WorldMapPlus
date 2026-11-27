@@ -20,7 +20,7 @@
 	"worldmapplus.settings.arrow_size": "Pfeilgröße",
 	"worldmapplus.settings.arrow_size.tip": "Größe des Spieler-Pfeils. Standard: 100 %",
 	"worldmapplus.settings.chunks_per_tick": "Karten-Tempo",
-	"worldmapplus.settings.chunks_per_tick.tip": "Chunks pro Tick für die 2D-Karte. Höher = schneller aktuell, braucht aber mehr Leistung. Standard: 6",
+	"worldmapplus.settings.chunks_per_tick.tip": "Wie schnell neue Bereiche auf der 2D-Karte erscheinen (Zeit pro Tick). Höher = füllt sich schneller, kostet aber FPS. Standard: 6",
 	"worldmapplus.settings.shading": "Höhenschattierung",
 	"worldmapplus.settings.shading.tip": "Auf der 2D-Karte Hänge heller und dunkler zeichnen, wie bei der Vanilla-Karte.",
 	"worldmapplus.settings.reset": "Standardwerte",
